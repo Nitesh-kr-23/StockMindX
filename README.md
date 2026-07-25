@@ -34,6 +34,8 @@ fetched at request time.
 - Python
 - TensorFlow / Keras
 - Streamlit
+- Matplotlib
+- Seaborn
 - Plotly
 - Pandas
 - NumPy
