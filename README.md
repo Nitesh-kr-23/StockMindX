@@ -97,12 +97,6 @@ Models are trained using walk-forward validation to prevent data leakage.
 
 ---
 
-## Screenshots
-
-Add dashboard screenshots here.
-
----
-
 ## Key Highlights
 
 - Deep Learning-based financial forecasting
