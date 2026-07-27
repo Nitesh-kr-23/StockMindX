@@ -2,6 +2,9 @@
 
 ### AI-Powered Multi-Horizon Stock Price & Return Forecasting Platform
 
+## Demo Link
+https://stockmindx.streamlit.app/
+
 StockMindX is a production-ready Streamlit application that forecasts
 short-term stock **returns** at multiple horizons using deep learning
 (TensorFlow/Keras), derives **future prices** from those returns, and presents both
