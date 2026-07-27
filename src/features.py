@@ -1,21 +1,3 @@
-"""
-features.py
-------------
-Feature engineering for NeuralHorizon.
-
-Computes a focused set of ~13 technical indicators per ticker (chosen for
-proven predictive/diagnostic value, not exhaustiveness — more indicators is
-not automatically better and adds noise/collinearity) plus the forward
-targets used for training.
-
-TARGET DESIGN: we predict forward LOG RETURNS at each horizon, not raw
-price. Predicting raw price is a common beginner mistake because a model
-can look deceptively accurate by simply echoing "tomorrow's price = today's
-price". Log returns force the model to actually learn direction and
-magnitude of change. Future PRICES are then derived deterministically from
-predicted returns at inference time (see app/app.py) — no separate price
-model is trained.
-"""
 import numpy as np
 import pandas as pd
 
@@ -117,9 +99,6 @@ def add_technical_features(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-# The ~13 features actually fed to the models. Kept deliberately short:
-# each one earns its place (trend, momentum, volatility, volume — no
-# redundant duplicates of the same signal).
 FEATURE_COLUMNS = [
     "log_return_1d",
     "volatility_20d",

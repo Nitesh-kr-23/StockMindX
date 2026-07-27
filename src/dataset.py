@@ -1,15 +1,3 @@
-"""
-dataset.py
------------
-Sliding-window sequence construction + WALK-FORWARD (expanding window)
-splitting, framework-agnostic (plain NumPy arrays -- fed directly into
-TensorFlow/Keras via `model.fit(X, y)`).
-
-We deliberately do NOT use a random train/test split on time series -- that
-leaks future information into training via overlapping windows and gives
-falsely optimistic metrics. Walk-forward validation trains on the past and
-always evaluates strictly on a later, unseen block of time.
-"""
 import numpy as np
 import pandas as pd
 
@@ -39,7 +27,7 @@ def build_sequences(df: pd.DataFrame, feature_cols=FEATURE_COLUMNS,
 
         for i in range(seq_len, len(g)):
             window = feats[i - seq_len:i]
-            target = targets[i - 1]  # already forward-looking at row i-1
+            target = targets[i - 1]  
             if np.isnan(window).any() or np.isnan(target).any():
                 continue
             X_list.append(window)

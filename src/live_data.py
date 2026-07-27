@@ -1,19 +1,3 @@
-"""
-live_data.py
--------------
-Fetches LIVE, current OHLCV data for a single ticker via `yfinance` and
-builds the feature window used for real-time inference.
-
-Training uses a static historical snapshot downloaded once via
-`src/fetch_data.py` (2015-present, 20 tickers). At inference time the
-Streamlit app calls THIS module instead -- every prediction, chart, and
-SHAP explanation in the dashboard is computed against data fetched fresh
-from Yahoo Finance, not a stale local copy. The only thing still read from
-the local processed feature table is the SHAP background reference sample
-(`app/app.py`'s `load_shap_background`), which is a deliberate modeling
-choice (SHAP explains new instances relative to the training distribution)
-rather than a shortcut around live data.
-"""
 from datetime import date, timedelta
 
 import pandas as pd
@@ -22,8 +6,7 @@ import yfinance as yf
 from features import add_technical_features, FEATURE_COLUMNS
 from dataset import SEQ_LEN
 
-# Extra trading days of history needed beyond SEQ_LEN so the slowest-
-# warming indicator (50-day SMA) is fully populated by the most recent row.
+
 INDICATOR_WARMUP_DAYS = 70
 # Calendar-day buffer to comfortably cover weekends/holidays for the
 # trading-day lookback above.

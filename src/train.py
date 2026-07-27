@@ -1,21 +1,3 @@
-"""
-train.py
----------
-Trains LSTM, GRU, and Transformer forecasters (TensorFlow/Keras) on a
-strict walk-forward (date-ordered) split, evaluates each with
-RMSE / MAE / MAPE / Directional Accuracy per horizon against a naive
-baseline, and persists everything the app needs:
-
-    models/<name>.keras       - trained model (native Keras format)
-    models/scaler.joblib      - feature scaler + config (fit on TRAIN ONLY)
-    models/metrics.json       - per-model, per-horizon evaluation metrics
-    models/residual_std.json  - per-model, per-horizon validation residual
-                                 std-dev, used by the app to build simple
-                                 confidence intervals (prediction +/- z*std)
-    models/history.json       - training curves (for optional diagnostics)
-
-Run: python src/train.py --epochs 15
-"""
 import argparse
 import json
 from pathlib import Path

@@ -1,31 +1,9 @@
-"""
-fetch_data.py
---------------
-Downloads real daily OHLCV history for 20 popular, liquid US stocks from
-2015-01-01 to the present day via `yfinance`, and saves it in the schema
-used throughout the rest of the pipeline:
-
-    Date, Open, High, Low, Close, Volume, Ticker
-
-Run: python src/fetch_data.py
-
-NOTE ON THIS SANDBOX: this development environment has no outbound network
-access to Yahoo Finance (only a small allow-list of package registries is
-reachable), so this script cannot be executed here to produce live data.
-It has been written and structured to run correctly in any normal internet-
-connected environment (your laptop, Colab, a CI runner, etc.) --
-`pip install -r requirements.txt` and then `python src/fetch_data.py` is
-all that's needed there.
-"""
 import time
 from pathlib import Path
 
 import pandas as pd
 import yfinance as yf
 
-# 20 popular, liquid large-cap tickers spanning multiple sectors, so the
-# model sees varied volatility/trend regimes rather than one sector's
-# idiosyncrasies.
 TICKERS = [
     "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA",       # Tech / mega-cap growth
     "META", "TSLA", "NFLX", "AMD", "CRM",           # Tech / consumer internet
