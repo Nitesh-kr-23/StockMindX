@@ -16,7 +16,7 @@ import tensorflow as tf
 sys.path.append(str(Path(__file__).resolve().parent.parent / "src"))
 from features import FEATURE_COLUMNS, HORIZONS 
 from fetch_data import TICKERS  
-from live_data import get_latest_window 
+from live_data import get_latest_window, LiveDataUnavailable 
 from models import MODEL_BUILDERS 
 from recommendation import recommend, project_portfolio_value 
 
@@ -290,6 +290,28 @@ def render_download(ticker, model_name, current_price, predicted_returns, ci_bou
     )
 
 
+def render_data_freshness_banner(meta: dict):
+    source = meta.get("source")
+    as_of = meta.get("as_of")
+ 
+    if source == "live":
+        return  
+ 
+    if source == "cache":
+        st.warning(
+            f"⚠️ Yahoo Finance is currently unavailable (likely rate-limited). "
+            f"Showing the **last successfully fetched data** for this ticker, "
+            f"cached at **{as_of}**. Forecasts below are based on this cached "
+            f"snapshot, not a fresh live fetch."
+        )
+    elif source == "snapshot":
+        st.error(
+            f"⚠️ Yahoo Finance is currently unavailable and no cached live data "
+            f"exists yet for this ticker. Showing the **historical training "
+            f"snapshot** (most recent date: **{as_of}**) as a fallback. "
+            f"Forecasts below may be significantly out of date."
+        )
+
 # --------------------------------------------------------------------------- #
 # Main
 # --------------------------------------------------------------------------- #
@@ -301,10 +323,15 @@ def main():
     ticker, model_name, investment = render_sidebar(models)
 
     try:
-        ticker_hist, window_df = load_live_ticker_data(ticker, seq_len)
-    except (ConnectionError, ValueError) as e:
-        st.error(f"⚠️ Could not fetch live data for {ticker}: {e}")
+        ticker_hist, window_df, data_meta = load_live_ticker_data(ticker, seq_len)
+    except LiveDataUnavailable as e:
+        st.error(
+            f"⚠️ Could not get any data for {ticker} -- live fetch failed and "
+            f"no cached or historical fallback is available. {e}"
+        )
         st.stop()
+
+    render_data_freshness_banner(data_meta)    
 
     current_price = float(ticker_hist["Close"].iloc[-1])
 
